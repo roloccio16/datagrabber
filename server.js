@@ -6,13 +6,15 @@ const port = 3000;
 // Middleware para parsear URL-encoded data
 app.use(express.urlencoded({ extended: true }));
 
-app.get("/help", (req, res) => {
-    res.send('curl -X POST -H "Content-Type: application/x-www-form-urlencoded" -d "data=untexto" http://localhost:3000/grab')
-})
+// Middleware de logging
+app.use((req, res, next) => {
+    console.log(`${req.method} ${req.url}`);
+    next();
+});
 
 // Ruta para manejar la solicitud a /grab
 app.post('/grab', (req, res) => {
-    const data = req.body.data; // Obtener el parámetro 'data'
+    const data = req.body.data;
 
     if (data) {
         // Guardar el contenido en output.txt
@@ -26,6 +28,17 @@ app.post('/grab', (req, res) => {
     } else {
         res.status(400).send('No se proporcionó ningún dato.');
     }
+});
+
+// Nueva ruta para obtener el contenido de output.txt
+app.get('/get-data', (req, res) => {
+    fs.readFile('output.txt', 'utf8', (err, data) => {
+        if (err) {
+            console.error('Error al leer el archivo:', err);
+            return res.status(500).send('Error al leer el archivo.');
+        }
+        res.send(data); // Devolver el contenido del archivo
+    });
 });
 
 // Iniciar el servidor
