@@ -6,6 +6,9 @@ const port = 3000;
 // Middleware para parsear URL-encoded data
 app.use(express.urlencoded({ extended: true }));
 
+//public folder
+
+app.use(express.static('public'));
 // Middleware de logging
 app.use((req, res, next) => {
     console.log(`${req.method} ${req.url}`);
@@ -46,6 +49,16 @@ app.get('/get-data', (req, res) => {
             return res.status(500).send('Error al leer el archivo.');
         }
         res.send(data); // Devolver el contenido del archivo
+    });
+});
+
+app.get('/clear', (req, res) => {
+    fs.writeFile('output.txt', '', (err) => {
+        if (err) {
+            console.error('Error al limpiar el archivo:', err);
+            return res.status(500).send('Error al limpiar el archivo.');
+        }
+        res.send('Archivo limpiado correctamente.');
     });
 });
 
