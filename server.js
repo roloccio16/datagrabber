@@ -20,7 +20,7 @@ let texto = "";
 app.use(cors());
 //allow origin on neocities
 app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', 'https://ultraeffective.neocities.org');
+    res.header('Access-Control-Allow-Origin', '*');
     next();
 });
 app.use(express.urlencoded({ extended: true }));
