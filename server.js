@@ -12,9 +12,17 @@ app.use((req, res, next) => {
     next();
 });
 
+app.get('/', (req, res) => {
+    res.send('¡Hola!');
+});
+
+app.get('/ayuda', (req, res) => {
+    res.send('¡Ayuda!');
+});
+
 // Ruta para manejar la solicitud a /grab
-app.post('/grab', (req, res) => {
-    const data = req.body.data;
+app.get('/grab', (req, res) => {
+    const data = req.query.data;
 
     if (data) {
         // Guardar el contenido en output.txt
