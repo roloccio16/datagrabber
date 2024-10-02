@@ -2,54 +2,30 @@ const express = require('express');
 const fs = require('fs');
 const app = express();
 const port = 3000;
+let texto = "";
 
-// Middleware para parsear URL-encoded data
 app.use(express.urlencoded({ extended: true }));
 
-//public folder
-
 app.use(express.static('public'));
-// Middleware de logging
+
 app.use((req, res, next) => {
     console.log(`${req.method} ${req.url}`);
     next();
 });
 
-app.get('/', (req, res) => {
-    res.send('¡Hola!');
-});
-
-app.get('/ayuda', (req, res) => {
-    res.send('¡Ayuda!');
-});
-
 // Ruta para manejar la solicitud a /grab
 app.get('/grab', (req, res) => {
     const data = req.query.data;
-
-    if (data) {
-        // Guardar el contenido en output.txt
-        fs.appendFile('output.txt', `${data}\n`, (err) => {
-            if (err) {
-                console.error('Error al escribir en el archivo:', err);
-                return res.status(500).send('Error al guardar el dato.');
-            }
-            res.send('Datos guardados correctamente.');
-        });
+    if(data){
+        texto = data;
+        res.send('Datos guardados correctamente.');
     } else {
         res.status(400).send('No se proporcionó ningún dato.');
     }
 });
 
-// Nueva ruta para obtener el contenido de output.txt
-app.get('/get-data', (req, res) => {
-    fs.readFile('output.txt', 'utf8', (err, data) => {
-        if (err) {
-            console.error('Error al leer el archivo:', err);
-            return res.status(500).send('Error al leer el archivo.');
-        }
-        res.send(data); // Devolver el contenido del archivo
-    });
+app.get('/loot', (req, res) => {
+    res.send(texto);
 });
 
 app.get('/clear', (req, res) => {
