@@ -18,10 +18,11 @@ let texto = "";
 */
 
 app.use(cors());
-app.use(cors({
-    origin: 'https://ultraeffective.neocities.org',
-    optionsSuccessStatus: 200
-}));
+//allow origin on neocities
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', 'https://ultraeffective.neocities.org');
+    next();
+});
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 app.use((req, res, next) => {
